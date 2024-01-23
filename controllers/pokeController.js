@@ -7,13 +7,21 @@ exports.getAllPokemon = (req, res, next) => {
 }
 
 const getData = async (req, res, next) => {
-        const species = req.params.species; 
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${species}`);
+        const species = req.params.species;
+        let response = {};
+        if (species === "random") {
+            const randomId = Math.floor(Math.random() * 151) + 1
+            req.params.species = randomId;
+            response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+        } else {
+            response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${species}`);
+        }
         const mainData = response.data;
         const evolutionResponse = await evolutionData(req, res, next);
         const apiData = {mainData, evolutionResponse};
         if(!apiData) {
-            throw new Error("Pokemon Not Found in pokeAPI");
+            //throw new Error("Pokemon Not Found in pokeAPI");
+            return;
         }
         else {        
             return (apiData); 
@@ -26,7 +34,6 @@ const evolutionData = async (req, res, next) => {
     const evolutionChainURL = speciesData.data.evolution_chain.url;
     const response = await axios.get(evolutionChainURL);
     const apiData = response.data;
-    console.log(apiData);
     if(!apiData) {
         throw new Error("Pokemon Not Found in pokeAPI");
     }
@@ -56,7 +63,7 @@ exports.addPokemon = async (req, res, next) => {
     req.body.weight = pokemonData.weight;
     req.body.image = pokemonData.sprites.front_default;
     req.body.pokeId = pokemonData.id;
-    req.body.species = req.params.species;
+    req.body.species = pokemonData.species.name;
     let currentSpecies = req.body.species;
     let nextSpecies = currentSpecies;
 
@@ -97,7 +104,6 @@ exports.changePokemon = async (req, res, next) => {
     const isMissingInformation = !req.body.name || !req.params.species
     if (isMissingInformation) return next(createError(400, 'Missing Pokemon Information')) 
     req.body.id =  pokemon.length + 1 + Date.now();
-    console.log("new id",req.body.id);
     //find old pokemon information
     const oldPokemonId = Number(req.params.id)
     const oldPokemonIndex = pokemon.findIndex(pokemon => pokemon.id === oldPokemonId)
