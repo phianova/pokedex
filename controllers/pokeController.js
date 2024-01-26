@@ -103,9 +103,9 @@ exports.addPokemon = async (req, res, next) => {
 
 function determineNextSpecies(evolutionChain, currentSpecies) {
   console.log("determine next species start", currentSpecies)
-  if (evolutionChain.species.name === currentSpecies) {
-    if (evolutionChain.evolves_to.length > 0) {
-      return evolutionChain.evolves_to[0].species.name;
+  if (evolutionChain?.species.name === currentSpecies) {
+    if (evolutionChain?.evolves_to.length > 0) {
+      return evolutionChain?.evolves_to[0]?.species.name;
     }
   } else {
     // for (const evolution of evolutionChain.evolves_to) {
@@ -114,19 +114,19 @@ function determineNextSpecies(evolutionChain, currentSpecies) {
     //     return nextSpecies;
     //   }
     // }
-    if (currentSpecies === evolutionChain.evolves_to[0].species.name) {
-      if (evolutionChain.evolves_to[0].evolves_to.length > 0) {
-        return evolutionChain.evolves_to[0].evolves_to[0].species.name;
+    if (currentSpecies === evolutionChain?.evolves_to[0]?.species?.name) {
+      if (evolutionChain?.evolves_to[0]?.evolves_to.length > 0) {
+        return evolutionChain?.evolves_to[0]?.evolves_to[0]?.species.name;
       } else {
         if (
           currentSpecies ===
-          evolutionChain.evolves_to[0].evolves_to[0].species.name
+          evolutionChain?.evolves_to[0]?.evolves_to[0]?.species.name
         ) {
           if (
-            evolutionChain.evolves_to[0].evolves_to[0].evolves_to.length > 0
+            evolutionChain?.evolves_to[0]?.evolves_to[0]?.evolves_to.length > 0
           ) {
-            return evolutionChain.evolves_to[0].evolves_to[0].evolves_to[0]
-              .species.name;
+            return evolutionChain?.evolves_to[0]?.evolves_to[0]?.evolves_to[0]
+              ?.species.name;
           }
         }
       }
