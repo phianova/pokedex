@@ -5,6 +5,8 @@ const app = express();
 const port = 3000;
 const router = require("./routes/pokeRoutes");
 const mongoose = require("mongoose");
+const cors = require("cors");
+app.use(cors());
 mongoose
   .connect(process.env.CONNECTION_STRING, {})
   .then(console.log("Connected to MongoDB"));
