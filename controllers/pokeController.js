@@ -245,6 +245,7 @@ exports.evolvePokemon = async (req, res, next) => {
 
     res.send(evolvedPokemon);
   } catch (err) {
+    console.log(err);
     return next(createError(404, "Could not evolve"));
   }
 };
