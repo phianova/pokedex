@@ -102,6 +102,7 @@ exports.addPokemon = async (req, res, next) => {
 };
 
 function determineNextSpecies(evolutionChain, currentSpecies) {
+  console.log("determine next species start", currentSpecies)
   if (evolutionChain.species.name === currentSpecies) {
     if (evolutionChain.evolves_to.length > 0) {
       return evolutionChain.evolves_to[0].species.name;
@@ -131,6 +132,7 @@ function determineNextSpecies(evolutionChain, currentSpecies) {
       }
     }
   }
+  console.log("determine next species end", currentSpecies)
   return currentSpecies;
 }
 
@@ -209,6 +211,7 @@ exports.evolvePokemon = async (req, res, next) => {
     req.params.species = evolvedSpecies;
     const allData = await getData(req, res, next);
     const pokemonData = allData.mainData;
+    console.log("pokemonData",pokemonData);
     const pokemonTypes = () => {
       let types = [];
       for (let i = 0; i < pokemonData.types.length; i++) {
@@ -242,8 +245,9 @@ exports.evolvePokemon = async (req, res, next) => {
       species: pokemonToEvolve.species,
       evolvesTo: pokemonToEvolve.evolvesTo,
     });
-
-    res.send(evolvedPokemon);
+    res.send("pokemon evolved");
+    console.log("evolvedPokemon", evolvedPokemon);
+    // res.send(evolvedPokemon);
   } catch (err) {
     console.log(err);
     return next(createError(404, "Could not evolve"));
